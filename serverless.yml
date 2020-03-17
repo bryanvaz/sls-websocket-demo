@@ -24,8 +24,6 @@ provider:
   environment:
     ENVIRONMENT: ${self:custom.stage}
     CORS_ORIGIN: ${self:custom.corsOrigin}
-    DYNAMODB_SOCKETS_TYPE_GSI: ${self:service}-sockets-type-gsi-${self:custom.stage}
-    DYNAMODB_SOCKETS_TABLE: ${self:service}-sockets-${self:custom.stage}
     WEBSOCKET_API_ENDPOINT: !Join ['', ['https://', !Ref WebsocketsApi, '.execute-api.', '${self:custom.region}', '.amazonaws.com/', '${self:custom.stage}/']]
   
 custom:
