@@ -1,7 +1,7 @@
 service: app-agent
 
 plugins:
-  - serverless-dynamodb-local
+  # - serverless-dynamodb-local
   - serverless-offline
 
 frameworkVersion: '>=1.38.0 <2.0.0'
@@ -35,17 +35,6 @@ custom:
   api_prefix: ${self:service}-${self:custom.stage}
   corsOrigin: '*'
   user: demo
-  dynamodb:
-    start:
-      port: 8700
-      inMemory: true
-      migrate: true
-      convertEmptyValues: true
-    migration:
-      dir: offline/migrations
-    noStart: true
-  serverless-offline:
-    port: 3700
 
 functions:
   defaultSocketHandler:
