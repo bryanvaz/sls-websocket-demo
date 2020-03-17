@@ -1,0 +1,42 @@
+{
+  "name": "app-agent",
+  "version": "0.1.0",
+  "description": "Agent and backend for Alberta appliance",
+  "main": "index.js",
+  "repository": "tbd",
+  "author": "Bryan Vaz",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "client": "node client/index.js",
+    "lint": "eslint --ext .js src client",
+    "fix": "yarn lint --fix",
+    "sls": "serverless",
+    "deploy": "sls deploy -v",
+    "offline": "sls offline"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.639.0",
+    "websocket": "^1.0.31"
+  },
+  "devDependencies": {
+    "@anttiviljami/serverless-stack-output": "^0.3.1",
+    "dynamodb-admin": "^4.0.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "prettier": "^1.19.1",
+    "serverless": "^1.66.0",
+    "serverless-domain-manager": "^3.3.1",
+    "serverless-dynamodb-local": "^0.2.39",
+    "serverless-offline": "^5.12.1",
+    "serverless-webpack": "^5.3.1",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3",
+    "webpack-node-externals": "^1.7.2"
+  }
+}

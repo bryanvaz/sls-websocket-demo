@@ -1,0 +1,68 @@
+service: app-agent
+
+plugins:
+  - serverless-dynamodb-local
+  - serverless-offline
+
+frameworkVersion: '>=1.38.0 <2.0.0'
+
+provider:
+  name: aws
+  memorySize: 256
+  runtime: nodejs12.x
+  region: us-east-1 # Overwrite the default region used. Default is us-east-1
+  stage: local # Set the default stage used. Default is dev
+  timeout: 6 # The default is 6 seconds
+  logRetentionInDays: 7
+  endpointType: REGIONAL # Default API Gateway Endpoints should be regional. Other Options are: PRIVATE, or EDGE (serverless default)
+  # Custom stack name
+  stackName: ${self:custom.user}-${self:service}-sls-${self:custom.stage}
+  # API GW Websocket specific configuration
+  websocketsApiName: ${self:service}-websocket-${self:custom.stage}
+  # Custom routes are selected by the value of the action property in the body
+  websocketsApiRouteSelectionExpression: $request.body.action
+  environment:
+    ENVIRONMENT: ${self:custom.stage}
+    CORS_ORIGIN: ${self:custom.corsOrigin}
+    DYNAMODB_SOCKETS_TYPE_GSI: ${self:service}-sockets-type-gsi-${self:custom.stage}
+    DYNAMODB_SOCKETS_TABLE: ${self:service}-sockets-${self:custom.stage}
+    WEBSOCKET_API_ENDPOINT: !Join ['', ['https://', !Ref WebsocketsApi, '.execute-api.', '${self:custom.region}', '.amazonaws.com/', '${self:custom.stage}/']]
+  
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  region: ${opt:region, self:provider.region}
+  prefix: ${self:service}-${self:custom.region}-${self:custom.stage}
+  api_prefix: ${self:service}-${self:custom.stage}
+  corsOrigin: '*'
+  user: demo
+  dynamodb:
+    start:
+      port: 8700
+      inMemory: true
+      migrate: true
+      convertEmptyValues: true
+    migration:
+      dir: offline/migrations
+    noStart: true
+  serverless-offline:
+    port: 3700
+
+functions:
+  defaultSocketHandler:
+    name: LAMBDA_${self:custom.user}_${self:service}_socket_default_${self:custom.stage}
+    handler: handler.defaultSocketHandler
+    events:
+      - websocket:
+          route: $default
+  handleSocketConnect:
+    name: LAMBDA_${self:custom.user}_${self:service}_socket_connect_${self:custom.stage}
+    handler: handler.handleSocketConnect
+    events:
+      - websocket:
+          route: $connect
+  handleSocketDisconnect:
+    name: LAMBDA_${self:custom.user}_${self:service}_socket_disconnect_${self:custom.stage}
+    handler: handler.handleSocketDisconnect
+    events:
+      - websocket:
+          route: $disconnect
