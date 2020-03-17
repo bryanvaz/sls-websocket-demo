@@ -1,9 +1,30 @@
 # Diagnostic Serverless Websocket Demo
 
-### Issue
+## Issue
 When trying to respond to a WS message using the `Aws.ApiGatewayManagementApi` connector
 in `serverless offline`, the connector's TCP connection is refused. However this works fine when deployed to AWS.
 
+**Error Message:**
+```
+Unable to generate socket message Error: connect ECONNREFUSED 127.0.0.1:443
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1137:16) {
+  message: 'connect ECONNREFUSED 127.0.0.1:443',
+  errno: 'ECONNREFUSED',
+  code: 'NetworkingError',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 443,
+  region: 'us-east-1',
+  hostname: '',
+  retryable: true,
+  time: 2020-03-17T16:37:57.040Z
+}
+->StackTrace:
+ Error: connect ECONNREFUSED 127.0.0.1:443
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1137:16)
+```
+
+**Offending Code:**
 ```Javascript
 // See src/connector/apigateway.connector.js
 class ApiGatewayConnector {
@@ -42,7 +63,7 @@ class ApiGatewayConnector {
 }
 ```
 
-To replicate issue:
+## To replicate issue:
 
 1. `yarn` _(...obviously)_
 1. `yarn offline` - start sls offline
