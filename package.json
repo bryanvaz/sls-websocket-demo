@@ -16,7 +16,7 @@
     "offline": "sls offline"
   },
   "dependencies": {
-    "aws-sdk": "^2.639.0",
+    "aws-sdk": "^2.814.0",
     "websocket": "^1.0.31"
   },
   "devDependencies": {
